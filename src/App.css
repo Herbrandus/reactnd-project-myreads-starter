@@ -8,7 +8,20 @@ body, .app {
   background: white;
 }
 
+h2 {
+  margin: 0 0 15px 0;
+  text-align: center;
+  padding: 10px 0;
+  background-color: #ddf4de;
+}
+
 /* main page */
+
+.loadingAnim {
+  margin: 40px auto;
+  text-align: center;
+  width: 100px;
+}
 
 .list-books-title {
   padding: 10px 0;
@@ -27,12 +40,12 @@ body, .app {
 }
 
 .bookshelf {
-  padding: 0 10px 20px;
+  padding: 0 0 20px;
 }
 
 @media (min-width: 600px) {
   .bookshelf {
-    padding: 0 20px 40px;
+    padding: 0 0 40px;
   }
 }
 
@@ -40,6 +53,7 @@ body, .app {
   border-bottom: 1px solid #dedede;
 }
 .bookshelf-books {
+  padding: 0 20px;
   text-align: center;
 }
 
