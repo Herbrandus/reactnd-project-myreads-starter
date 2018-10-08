@@ -12,13 +12,62 @@ class BooksApp extends React.Component {
   
   state = {
     books: [],
-    showSearchPage: false
+    showSearchPage: false,
+    query: ''
+  }
+
+  updateQuery = (query) => {
+    this.setState({ query: query.trim() })
+  }
+
+  clearQuery = () => {
+    this.setState({ query: '' })
   }
 
   componentDidMount() {
     BooksAPI.getAll().then((books) => {
       this.setState({ books })
     })
+  }
+
+  changeBookShelf = (targetBook, newShelf) => {
+
+    console.log('new shelf: ', newShelf)
+
+    // Call the BooksAPI method to update the Books array
+    BooksAPI.update(targetBook, newShelf)
+    .then(response => {
+      
+      /* response is returned as an object with shelves containing the books, 
+       * seperated with three keys
+       * I need to get all the books as objects in one array */
+
+      // loop over response object
+      for (let item in response) {
+        // loop over array in each object item
+        response[item].forEach((elem, index) => {
+          // change value of each array item to object of book
+           let newBook = this.state.books.find(book => book.id === elem)
+          response[item][index] = newBook
+        })
+      } // end loop
+      
+      let newBooks = []
+
+      // loop over new object and put all new object items in 1 array
+      for (let books in response) {
+        response[books].forEach(elem => newBooks.push(elem))
+      }     
+      
+      console.log('new books: ', newBooks)
+
+      // use new array to update the state
+      this.setState(state => ({
+        books: newBooks
+      }))
+
+    })
+
   }
   
   /**
@@ -29,6 +78,9 @@ class BooksApp extends React.Component {
    */
 
   render() {
+
+    const { query } = this.state
+    
     return (
       <div className="app">
         <div className="list-books">
@@ -49,8 +101,14 @@ class BooksApp extends React.Component {
                   However, remember that the BooksAPI.search method DOES search by title or author. So, don't worry if
                   you don't find a specific author or title. Every search is limited by search terms.
                 */}
-                <input type="text" placeholder="Search by title or author"/>
-
+                <input type="text" placeholder=""/>
+                <input
+                  className='search-books-input'
+                  type='text'
+                  placeholder='Search by title or author'
+                  value={query}
+                  onChange={(event) => this.updateQuery(event.target.value)}
+                />
               </div>
             </div>
             <div className="search-books-results">
@@ -61,7 +119,12 @@ class BooksApp extends React.Component {
           <div>
             <div className="list-books-content">
               <Route exact path="/" render={() => (
-                <ListBooks books={this.state.books} />
+                <ListBooks 
+                  books={this.state.books}
+                  onChangeShelf={(book, shelf) => {
+                    this.changeBookShelf(book, shelf)
+                  }}
+                />
               )}/>
             </div>
             <div className="open-search">

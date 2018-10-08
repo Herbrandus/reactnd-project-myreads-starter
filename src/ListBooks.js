@@ -32,39 +32,24 @@ class ListBooks extends Component {
   	// Get the value of the new selected shelf
   	let newShelf = document.getElementById(bookId).value
 
+  	console.log('book id: ', bookId)
+
+  	console.log('new shelf:', newShelf)
+
   	// Copy the books array for manipulation before updating
   	let booksCopy = this.props.books
 
-	// Get the accompanying key of the book with the given id
-  	let targetKey
-  	booksCopy.forEach((book, key) => {
-  		console.log(key)
-  		if (book.id === bookId)
-  			targetKey = key
-  	})
+  	let targetBook = booksCopy.find(e => e.id == bookId)
 
-  	// Get the book out of the copied books array using the key
-	let targetBook = {...booksCopy[targetKey]}
 
-  	console.log('current shelf: ' + targetBook.shelf)
+  	console.log('current shelf: ', targetBook)
 
   	// Before we change, check if the selected shelf isn't the current one
-  	if (targetBook.shelf == newShelf) {
+  	if (targetBook.shelf != newShelf) {
 
-  		// Set the new shelf for the selected book
-	  	targetBook.shelf = newShelf
-
-	  	console.log('new shelf: ' + targetBook.shelf)
-
-	  	// Update copied Books array
-	  	booksCopy[targetKey] = targetBook
-
-	  	// Call the BooksAPI method to update the Books array
-	  	BooksAPI.update(this.props.books).then(books => {
-	      this.setState(state => ({
-	        books: booksCopy
-	      }))
-	    })
+	  	if (this.props.onChangeShelf) {
+			this.props.onChangeShelf(targetBook, newShelf)
+		}
   	}
 
   }
@@ -75,6 +60,8 @@ class ListBooks extends Component {
 
     if (books.length) {
 
+    	console.log(books)
+
     	let showBooks
 	    if (query) {
 	      const match = new RegExp(escapeRegExp(query), 'i')
@@ -83,15 +70,7 @@ class ListBooks extends Component {
 	      showBooks = books
 	    }
 
-	    showBooks.sort(sortBy('name'))
-
-	    /* <input
-	            className='search-contacts'
-	            type='text'
-	            placeholder='Search contacts'
-	            value={query}
-	            onChange={(event) => this.updateQuery(event.target.value)}
-	          /> */
+	    showBooks.sort(sortBy('name'))	    
 
 	    // filter for each shelf
 	    const currReading = books.filter((book) => book.shelf === 'currentlyReading')
@@ -101,14 +80,17 @@ class ListBooks extends Component {
 	    // put shelves in array with title for easy mapping during render
 	    const shelves = [
 	    	{ 	id: 'shelf1',
+	    		value: 'currentlyReading',
 	    		title: 'Currently Reading',
 	    		books: currReading
 	    	},
 	    	{ 	id: 'shelf2',
+	    		value: 'wantToRead',
 	    		title: 'Want to Read',
 	    		books: wantToRead
 	    	},
 	    	{ 	id: 'shelf3',
+	    		value: 'read',
 	    		title: 'Read',
 	    		books: haveRead
 	    	}
@@ -117,7 +99,7 @@ class ListBooks extends Component {
 	    return (
 	      <div>
 	          {shelves.map((shelf) => (
-				<div key={shelf.id} className="bookshelf">
+	          	<div key={shelf.id} className="bookshelf">
 					<h2>{shelf.title}</h2>
 					<div className="bookshelf-books">
 						<ol className="books-grid">
@@ -131,9 +113,13 @@ class ListBooks extends Component {
 							                backgroundImage: `url(${book.imageLinks.smallThumbnail})`
 							              }}/>
 							              <div className="book-shelf-changer">
-											<select id={book.id} onChange={(value) => this.changeShelf(book.id) }>
+											<select 
+												id={book.id} 
+												onChange={(value) => this.changeShelf(book.id) }
+												defaultValue={book.shelf}
+											>
 												<option value="move" disabled>Move to...</option>
-												<option value="currentlyReading">Currently Reading</option>
+												<option value="currentlyReading">Currently Reading</option>												
 												<option value="wantToRead">Want To Read</option>
 												<option value="read">Read</option>
 												<option value="none">None</option>
@@ -150,7 +136,7 @@ class ListBooks extends Component {
 						</ol>
 					</div>
 				</div>
-	          ))}
+	          ))}	          
 	      </div>
 	    )
 
