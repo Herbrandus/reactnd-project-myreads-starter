@@ -32,21 +32,16 @@ class ListBooks extends Component {
   	// Get the value of the new selected shelf
   	let newShelf = document.getElementById(bookId).value
 
-  	console.log('book id: ', bookId)
-
-  	console.log('new shelf:', newShelf)
-
   	// Copy the books array for manipulation before updating
   	let booksCopy = this.props.books
 
+  	// get the book that should have its shelf changed
   	let targetBook = booksCopy.find(e => e.id == bookId)
-
-
-  	console.log('current shelf: ', targetBook)
 
   	// Before we change, check if the selected shelf isn't the current one
   	if (targetBook.shelf != newShelf) {
 
+  		// call onChangeShelf function in App.js
 	  	if (this.props.onChangeShelf) {
 			this.props.onChangeShelf(targetBook, newShelf)
 		}
@@ -58,9 +53,8 @@ class ListBooks extends Component {
     const { books } = this.props
     const { query } = this.state
 
-    if (books.length) {
 
-    	console.log(books)
+    if (books.length) {
 
     	let showBooks
 	    if (query) {
@@ -70,6 +64,7 @@ class ListBooks extends Component {
 	      showBooks = books
 	    }
 
+	    // sort books by name
 	    showBooks.sort(sortBy('name'))	    
 
 	    // filter for each shelf
@@ -142,6 +137,7 @@ class ListBooks extends Component {
 
 	} else {
 
+		// show loading animation when data is not ready yet
 		return (
 			<div className="loadingAnim">
 				<img width="30" height="30" src="/icons/loading.gif" alt="loading" />
