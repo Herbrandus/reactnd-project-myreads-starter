@@ -3,23 +3,11 @@ import { Link } from 'react-router-dom'
 import PropTypes from 'prop-types'
 import escapeRegExp from 'escape-string-regexp'
 import sortBy from 'sort-by'
-import * as BooksAPI from './BooksAPI'
+import ShowBook from './ShowBook'
 
 class ListBooks extends Component {
   static propTypes = {
     books: PropTypes.array.isRequired
-  }
-
-  state = {
-    query: ''
-  }
-
-  updateQuery = (query) => {
-    this.setState({ query: query.trim() })
-  }
-
-  clearQuery = () => {
-    this.setState({ query: '' })
   }
 
   /* Function to change the shelf of a selected book
@@ -36,10 +24,10 @@ class ListBooks extends Component {
   	let booksCopy = this.props.books
 
   	// get the book that should have its shelf changed
-  	let targetBook = booksCopy.find(e => e.id == bookId)
+  	let targetBook = booksCopy.find(e => e.id === bookId)
 
   	// Before we change, check if the selected shelf isn't the current one
-  	if (targetBook.shelf != newShelf) {
+  	if (targetBook.shelf !== newShelf) {
 
   		// call onChangeShelf function in App.js
 	  	if (this.props.onChangeShelf) {
@@ -51,21 +39,12 @@ class ListBooks extends Component {
 
   render() {
     const { books } = this.props
-    const { query } = this.state
 
 
     if (books.length) {
 
-    	let showBooks
-	    if (query) {
-	      const match = new RegExp(escapeRegExp(query), 'i')
-	      showBooks = books.filter((book) => match.test(book.name))
-	    } else {
-	      showBooks = books
-	    }
-
-	    // sort books by name
-	    showBooks.sort(sortBy('name'))	    
+	    // sort books by name 
+	    books.sort(sortBy('name'))	    
 
 	    // filter for each shelf
 	    const currReading = books.filter((book) => book.shelf === 'currentlyReading')
@@ -91,6 +70,8 @@ class ListBooks extends Component {
 	    	}
 	    ]
 
+	    // <Link className="book" to={`/books/${book.title.replace(/ /g, '-').toLowerCase()}`}>
+
 	    return (
 	      <div>
 	          {shelves.map((shelf) => (
@@ -102,7 +83,7 @@ class ListBooks extends Component {
 							<li key={book.id}>
 								<div className="book">
 									<div className="book-top">
-										<div className="book-cover" style={{
+										<Link to={`/books/${book.title.replace(/ /g, '-').toLowerCase()}`} className="book-cover" style={{
 							                width: 128,
 							                height: 193,
 							                backgroundImage: `url(${book.imageLinks.smallThumbnail})`
@@ -121,10 +102,12 @@ class ListBooks extends Component {
 											</select>
 							              </div>
 									</div>
-									<div className="book-title">{book.title}</div>
-									<div className="book-authors">
-										{ book.authors.join(', ') }
-									</div>
+									<Link to={`/books/${book.title.replace(/ /g, '-').toLowerCase()}`}>
+										<div className="book-title">{book.title}</div>
+										<div className="book-authors">
+											{ book.authors.join(', ') }
+										</div>
+									</Link>
 								</div>
 							</li>
 						))}

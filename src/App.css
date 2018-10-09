@@ -147,15 +147,29 @@ h2 {
 .book {
   width: 140px;
 }
+
+.book > a {
+  text-decoration: none;
+}
+
 .book-title,
 .book-authors {
   font-size: 0.8em;
 }
+
 .book-title {
   margin-top: 10px;
 }
-.book-authors {
+
+.book-authors,
+a .book-authors {
   color: #999;
+  text-decoration: none;
+}
+
+a .book-title {
+  color: #000;
+  text-decoration: none;
 }
 
 .book-top {
@@ -192,8 +206,74 @@ h2 {
   box-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23);
   background: #eee;
 }
+
 .book-cover-title {
   padding: 20px 10px 0;
   text-align: center;
   font-size: 0.8em;
+}
+
+.showBook {
+  text-align: center;
+}
+
+.showBook h2 {
+  margin: 0;
+}
+
+.showBook h2 > a {
+    position: absolute;
+    float: left;
+    top: 70px;
+    left: 0;
+    background-color: transparent;
+    z-index: 1000;
+}
+
+.showBook h3.subTitle {
+    text-align: center;
+    font-size: 1.3em;
+    margin: 0;
+    padding: 10px 0;
+    background: #fdfbf8;
+}
+
+.showBook .bookDescription {
+  text-align: left;
+  font-size: 14px;
+  width: 550px;
+  max-width: 95%;
+  margin: 10px auto 20px auto;
+}
+
+nav > strong {
+  display: block;
+  color: #3b2718;
+  text-align: center;
+  margin: 15px 0 8px 0;
+}
+
+button.toShelf {
+    border: #3b2718 solid 1px;
+    display: inline-block;
+    padding: 5px 15px;
+    border-radius: 3px;
+    margin: 0 3px;
+    background: #f4f1ea;
+    color: #3b2718;
+    cursor: pointer;
+}
+
+.currentlyReading > button.toShelf.currentlyReading,
+.wantToRead > button.toShelf.wantToRead,
+.read > button.toShelf.read {
+  background: #3b2718;
+  color: #f4f1ea;
+}
+
+a.back {
+    color: #3b2718;
+    font-size: 14px;
+    display: inline-block;
+    margin: 15px;
 }
