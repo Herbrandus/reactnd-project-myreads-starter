@@ -44,8 +44,7 @@ class SearchBooks extends Component {
 
 
 	componentDidUpdate() {
-		if (this.state.results.length > 0) 
-			this.state.didUpdate = true
+		this.state.didUpdate = true
 	}
 
   	render() {
@@ -63,7 +62,8 @@ class SearchBooks extends Component {
 
 	  	if (this.state.didUpdate) {
 
-	  		console.log(results[0].authors)
+	  		console.log(results)
+
 	  		this.state.didUpdate = false
 
 		    return (
@@ -108,7 +108,7 @@ class SearchBooks extends Component {
 								</div>
 								<div className="book-title">{book.title}</div>
 								<div className="book-authors">
-									{ book.authors.join(', ') }
+									{ book.authors && book.authors.join(', ') }
 								</div>
 							</div>
 						</li>
