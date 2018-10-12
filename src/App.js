@@ -46,16 +46,20 @@ class BooksApp extends React.Component {
         // loop over array in each object item
         response[item].forEach((elem, index) => {
           // change value of each array item to object of book
-           let newBook = this.state.books.find(book => {
+          let newBook = this.state.books.find(book => {
             if (book.id === elem) {
               // if current book is the same as the target book to change shelf
               // first edit the shelf property before returning
               if (book.id === targetBook.id) {
                 book.shelf = newShelf
-              } 
+              }
               return book
             }
           })
+
+          if (newBook === undefined)
+            newBook = targetBook
+
           response[item][index] = newBook
         })
       } // end loop
@@ -65,7 +69,7 @@ class BooksApp extends React.Component {
       // loop over new object and put all new object items in 1 array
       for (let books in response) {
         response[books].forEach(elem => newBooks.push(elem))
-      }     
+      }
       
       // use new array to update the state
       this.setState(state => ({
@@ -116,11 +120,17 @@ class BooksApp extends React.Component {
           <ShowBook
             bookUrl={book}
             allBooks={this.state.books}
+            onChangeShelf={(book, shelf) => {
+              this.changeBookShelf(book, shelf)
+            }}
           />
         )}/>
         <Route exact path='/search' render={() => (
           <SearchBooks
-            onAddBook={this.addBook}
+            addedBooks={this.state.books}
+            onAddBook={(book, shelf) => {
+              this.changeBookShelf(book, shelf)
+            }}
           />
         )}/>
       </div>

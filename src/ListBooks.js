@@ -1,11 +1,10 @@
 import React, { Component } from 'react'
 import { Link } from 'react-router-dom'
 import PropTypes from 'prop-types'
-import escapeRegExp from 'escape-string-regexp'
 import sortBy from 'sort-by'
-import ShowBook from './ShowBook'
 
 class ListBooks extends Component {
+  
   static propTypes = {
     books: PropTypes.array.isRequired
   }
@@ -40,7 +39,6 @@ class ListBooks extends Component {
   render() {
     const { books } = this.props
 
-
     if (books.length) {
 
 	    // sort books by name 
@@ -69,8 +67,6 @@ class ListBooks extends Component {
 	    		books: haveRead
 	    	}
 	    ]
-
-	    // <Link className="book" to={`/books/${book.title.replace(/ /g, '-').toLowerCase()}`}>
 
 	    return (
 	      <div>

@@ -7,6 +7,10 @@ import * as BooksAPI from './BooksAPI'
 
 class SearchBooks extends Component {
 
+	static propTypes = {
+	    addedBooks: PropTypes.array.isRequired
+	 }
+
 	state = {
 		query: '',
 		didUpdate: false,
@@ -16,13 +20,15 @@ class SearchBooks extends Component {
 	updateQuery = (query) => {
 		this.setState({ query: query.trim() })
 		if (query !== '') {
-	  		BooksAPI.search(query).then((books) => {
-	  			if (books.length) {
-	  				this.setState({ results: books })
+	  		BooksAPI.search(query).then((foundBooks) => {
+	  			if (foundBooks.length) {
+	  				this.setState({ results: foundBooks })
 	  			}
 	  		}).catch((error) => {
 	  			console.log(error)
 	  		})
+	  	} else {
+	  		this.clearQuery()
 	  	}
 	}
 
@@ -47,11 +53,46 @@ class SearchBooks extends Component {
 		this.state.didUpdate = true
 	}
 
+
+	/* Function to change the shelf of a selected book
+	 * Uses the book id also set to the select-element
+	 * to perform the change
+	 *
+	 */
+	changeShelf = (bookId) => {
+
+		// Get the value of the new selected shelf
+		let newShelf = document.getElementById(bookId).value
+
+		// Copy the books array for manipulation before updating
+		let books = this.state.results
+
+		// get the book that should have its shelf changed
+		let targetBook = books.find(e => e.id === bookId)
+
+		// Before we change, check if the selected shelf isn't the current one
+		if (targetBook.shelf !== newShelf) {
+
+			// if the book is not on a shelf, or has 'shelf' undefined, set it to its new shelf
+			if (targetBook.shelf === undefined || targetBook.shelf === 'none') {
+				targetBook.shelf = newShelf
+			}
+
+			// call onChangeShelf function in App.js
+		  	if (this.props.onAddBook) {
+				this.props.onAddBook(targetBook, newShelf)
+			}
+		}
+
+	}
+
+
   	render() {
 
   		// set title
 	  	document.title = 'Search books | BestReads'	  	
 
+	  	let { addedBooks } = this.props
 	  	const { query, results } = this.state
 
 	  	/*
@@ -62,9 +103,22 @@ class SearchBooks extends Component {
 
 	  	if (this.state.didUpdate) {
 
-	  		console.log(results)
-
 	  		this.state.didUpdate = false
+
+	  		results.map(book => {
+	  			
+	  			let match = addedBooks.find(addedBook => addedBook.id === book.id)
+
+	  			if (match) {
+	  				book.shelf = match.shelf
+	  			}
+
+	  			if (book.shelf === undefined) {
+	  				book.shelf = 'none'
+	  			}
+	  		})
+
+	  		console.log(results)
 
 		    return (
 		    	<div className="search-books">

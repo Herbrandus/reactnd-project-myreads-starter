@@ -33,7 +33,7 @@ class ShowBook extends Component {
 
   		// call onChangeShelf function in App.js
 	  	if (this.props.onChangeShelf) {
-			this.props.onChangeShelf(targetBook, newShelf)
+			   this.props.onChangeShelf(targetBook, newShelf)
 		  }
   	}
 
@@ -44,8 +44,10 @@ class ShowBook extends Component {
 
     if (allBooks.length) {
 
+      // check if there is actually a valid title in the URL
       if (bookUrl.match.params.book) {
 
+        // if so, use .find() to get the book that matches the modified 'URL' title 
         const thisBook = allBooks.find(book => {
           let convertTitle = book.title.replace(/ /g, '-').toLowerCase()
           if (convertTitle === bookUrl.match.params.book) {
@@ -53,7 +55,8 @@ class ShowBook extends Component {
           }
         })
 
-        console.log(thisBook)
+        // set title
+        document.title = thisBook.title + ' | BestReads' 
 
         return (
             <article className="showBook">
@@ -71,9 +74,9 @@ class ShowBook extends Component {
               <p className="bookDescription">{thisBook.description}</p>
               <nav className={thisBook.shelf}>
                 <strong>Add to shelf:</strong>
-                <button className="toShelf wantToRead" onClick={this.changeShelf(thisBook.id, 'wantToRead')}>Want To Read</button>
-                <button className="toShelf currentlyReading" onClick={this.changeShelf(thisBook.id, 'currentlyReading')}>Currently Reading</button>
-                <button className="toShelf read" onClick={this.changeShelf(thisBook.id, 'read')}>Read</button>
+                <button className="toShelf wantToRead" onClick={() => { this.changeShelf(thisBook.id, 'wantToRead') }}>Want To Read</button>
+                <button className="toShelf currentlyReading" onClick={() => { this.changeShelf(thisBook.id, 'currentlyReading') }}>Currently Reading</button>
+                <button className="toShelf read" onClick={() => { this.changeShelf(thisBook.id, 'read') }}>Read</button>
               </nav>
               <Link className="back" to="/">Back to overview</Link>
             </article>
