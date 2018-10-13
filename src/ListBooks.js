@@ -30,7 +30,7 @@ class ListBooks extends Component {
 
   		// call onChangeShelf function in App.js
 	  	if (this.props.onChangeShelf) {
-			this.props.onChangeShelf(targetBook, newShelf)
+			this.props.onChangeShelf(targetBook, newShelf, false)
 		}
   	}
 
@@ -94,7 +94,7 @@ class ListBooks extends Component {
 												<option value="currentlyReading">Currently Reading</option>												
 												<option value="wantToRead">Want To Read</option>
 												<option value="read">Read</option>
-												<option value="none">None</option>
+												<option value="none">Remove</option>
 											</select>
 							              </div>
 									</div>

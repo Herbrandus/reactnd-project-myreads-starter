@@ -61,6 +61,8 @@ class SearchBooks extends Component {
 	 */
 	changeShelf = (bookId) => {
 
+		let addedNewBook = false
+
 		// Get the value of the new selected shelf
 		let newShelf = document.getElementById(bookId).value
 
@@ -76,11 +78,14 @@ class SearchBooks extends Component {
 			// if the book is not on a shelf, or has 'shelf' undefined, set it to its new shelf
 			if (targetBook.shelf === undefined || targetBook.shelf === 'none') {
 				targetBook.shelf = newShelf
+
+				// change variable to show confirmation message when it is added to the shelves
+				addedNewBook = true
 			}
 
 			// call onChangeShelf function in App.js
 		  	if (this.props.onAddBook) {
-				this.props.onAddBook(targetBook, newShelf)
+				this.props.onAddBook(targetBook, newShelf, addedNewBook)
 			}
 		}
 
@@ -95,30 +100,26 @@ class SearchBooks extends Component {
 	  	let { addedBooks } = this.props
 	  	const { query, results } = this.state
 
-	  	/*
-			NOTES: The search from BooksAPI is limited to a particular set of search terms.
-              You can find these search terms here:
-              https://github.com/udacity/reactnd-project-myreads-starter/blob/master/SEARCH_TERMS.md
-	  	*/
-
-	  	if (this.state.didUpdate) {
+	  	// if the Component was just updated perform the render function
+	  	if (this.state.didUpdate && results.length) {
 
 	  		this.state.didUpdate = false
 
+	  		// loop over the results from the search
 	  		results.map(book => {
 	  			
 	  			let match = addedBooks.find(addedBook => addedBook.id === book.id)
 
+	  			// if the book already exists on your shelves, add matching shelf to every book
 	  			if (match) {
 	  				book.shelf = match.shelf
 	  			}
 
+	  			// if the book does not exist on your shelves and has no shelf defined, set it to 'none'
 	  			if (book.shelf === undefined) {
 	  				book.shelf = 'none'
 	  			}
 	  		})
-
-	  		console.log(results)
 
 		    return (
 		    	<div className="search-books">
@@ -189,7 +190,7 @@ class SearchBooks extends Component {
 			          </div>
 			        </div>
 			        <div className="search-books-results">
-			          <ol className="books-grid"></ol>
+			          <div className="search-no-results">No results</div>
 			        </div>
 			    </div>
 			)

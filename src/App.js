@@ -13,7 +13,9 @@ import './App.css'
 class BooksApp extends React.Component {
   
   state = {
-    books: []
+    books: [],
+    newBookMessageActive: false,
+    newBookMessage: 'The book is added to your shelves!'
   }
 
   // Get all books with the BooksAPI
@@ -24,14 +26,8 @@ class BooksApp extends React.Component {
   }
 
 
-  // method for adding a book
-  addBook = (book) => {
-
-  }
-
-
   // method for changing the shelf of a book
-  changeBookShelf = (targetBook, newShelf) => {
+  changeBookShelf = (targetBook, newShelf, addedNewBook) => {
 
     // Call the BooksAPI method to update the Books array
     BooksAPI.update(targetBook, newShelf)
@@ -76,21 +72,27 @@ class BooksApp extends React.Component {
         books: newBooks
       }))
 
+      if (addedNewBook) {
+
+        // if the book was not on your shelves yet, show a message
+        // to confirm that it was added succesfully
+
+        this.setState(state => ({
+          newBookMessageActive: true
+        }))
+
+        setTimeout(() => {
+          this.setState(state => ({
+            newBookMessageActive: false
+          }))
+        }, 6000)
+      }
+
     })
 
   }
 
-
-  // perform actions after component updates
-  componentDidUpdate() {  }
   
-  /**
-   * TODO: Instead of using this state variable to keep track of which page
-   * we're on, use the URL in the browser's address bar. This will ensure that
-   * users can use the browser's back and forward buttons to navigate between
-   * pages, as well as provide a good URL they can bookmark and share.
-   */
-
   render() {
 
     // set title
@@ -107,8 +109,8 @@ class BooksApp extends React.Component {
           <div>
             <ListBooks 
               books={this.state.books}
-              onChangeShelf={(book, shelf) => {
-                this.changeBookShelf(book, shelf)
+              onChangeShelf={(book, shelf, addedNewBook) => {
+                this.changeBookShelf(book, shelf, addedNewBook)
               }}
             />
             <div className="open-search">
@@ -120,19 +122,20 @@ class BooksApp extends React.Component {
           <ShowBook
             bookUrl={book}
             allBooks={this.state.books}
-            onChangeShelf={(book, shelf) => {
-              this.changeBookShelf(book, shelf)
+            onChangeShelf={(book, shelf, addedNewBook) => {
+              this.changeBookShelf(book, shelf, addedNewBook)
             }}
           />
         )}/>
         <Route exact path='/search' render={() => (
           <SearchBooks
             addedBooks={this.state.books}
-            onAddBook={(book, shelf) => {
-              this.changeBookShelf(book, shelf)
+            onAddBook={(book, shelf, addedNewBook) => {
+              this.changeBookShelf(book, shelf, addedNewBook)
             }}
           />
         )}/>
+        { this.state.newBookMessageActive && <div className="book-message">{this.state.newBookMessage}</div> }
       </div>
     )
   }

@@ -33,7 +33,7 @@ class ShowBook extends Component {
 
   		// call onChangeShelf function in App.js
 	  	if (this.props.onChangeShelf) {
-			   this.props.onChangeShelf(targetBook, newShelf)
+			   this.props.onChangeShelf(targetBook, newShelf, false)
 		  }
   	}
 
