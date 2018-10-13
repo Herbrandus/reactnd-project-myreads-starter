@@ -1,9 +1,6 @@
 import React, { Component } from 'react'
 import { Link } from 'react-router-dom'
 import PropTypes from 'prop-types'
-import escapeRegExp from 'escape-string-regexp'
-import sortBy from 'sort-by'
-import * as BooksAPI from './BooksAPI'
 
 class ShowBook extends Component {
   static propTypes = {
@@ -52,35 +49,45 @@ class ShowBook extends Component {
           let convertTitle = book.title.replace(/ /g, '-').toLowerCase()
           if (convertTitle === bookUrl.match.params.book) {
             return book
+          } else {
+            return false
           }
         })
 
-        // set title
-        document.title = thisBook.title + ' | BestReads' 
+        // if the book is found with the previous function, show the info about the book
+        if (thisBook) {
 
-        return (
-            <article className="showBook">
-              <div className="bookshelf">
-                <h2>
-                  <Link className="close-search" to="/">Close</Link>
-                  {thisBook.title}
-                </h2>
-                { thisBook.subtitle ? <h3 className="subTitle">{thisBook.subtitle}</h3>: ''}
-              </div>
-              <img src={thisBook.imageLinks.thumbnail} alt={thisBook.title} />
-              <div className="book-authors">
-                { thisBook.authors.join(', ') }
-              </div>
-              <p className="bookDescription">{thisBook.description}</p>
-              <nav className={thisBook.shelf}>
-                <strong>Add to shelf:</strong>
-                <button className="toShelf wantToRead" onClick={() => { this.changeShelf(thisBook.id, 'wantToRead') }}>Want To Read</button>
-                <button className="toShelf currentlyReading" onClick={() => { this.changeShelf(thisBook.id, 'currentlyReading') }}>Currently Reading</button>
-                <button className="toShelf read" onClick={() => { this.changeShelf(thisBook.id, 'read') }}>Read</button>
-              </nav>
-              <Link className="back" to="/">Back to overview</Link>
-            </article>
-          )
+          // set title
+          document.title = thisBook.title + ' | BestReads' 
+
+          return (
+              <article className="showBook">
+                <div className="bookshelf">
+                  <h2>
+                    <Link className="close-search" to="/">Close</Link>
+                    {thisBook.title}
+                  </h2>
+                  { thisBook.subtitle ? <h3 className="subTitle">{thisBook.subtitle}</h3>: ''}
+                </div>
+                <img src={thisBook.imageLinks.thumbnail} alt={thisBook.title} />
+                <div className="book-authors">
+                  { thisBook.authors.join(', ') }
+                </div>
+                <p className="bookDescription">{thisBook.description}</p>
+                <nav className={thisBook.shelf}>
+                  <strong>Add to shelf:</strong>
+                  <button className="toShelf wantToRead" onClick={() => { this.changeShelf(thisBook.id, 'wantToRead') }}>Want To Read</button>
+                  <button className="toShelf currentlyReading" onClick={() => { this.changeShelf(thisBook.id, 'currentlyReading') }}>Currently Reading</button>
+                  <button className="toShelf read" onClick={() => { this.changeShelf(thisBook.id, 'read') }}>Read</button>
+                </nav>
+                <Link className="back" to="/">Back to overview</Link>
+              </article>
+            )
+
+        } else {
+          
+          return (<article className="showBook">No matching book found!</article>)
+        }
       }
 
     } else {
