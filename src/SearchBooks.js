@@ -1,7 +1,6 @@
 import React, { Component } from 'react'
 import { Link } from 'react-router-dom'
 import PropTypes from 'prop-types'
-import sortBy from 'sort-by'
 import * as BooksAPI from './BooksAPI'
 
 class SearchBooks extends Component {
@@ -12,14 +11,13 @@ class SearchBooks extends Component {
 
 	state = {
 		query: '',
-		didUpdate: false,
 		results: []
 	}
 
 	updateQuery = (query) => {
-		this.setState({ query: query.trim() })
+		this.setState({ query: query })
 		if (query !== '') {
-	  		BooksAPI.search(query).then((foundBooks) => {
+	  		BooksAPI.search(query.trim()).then((foundBooks) => {
 	  			if (foundBooks.length) {
 	  				this.setState({ results: foundBooks })
 	  			}
@@ -40,11 +38,6 @@ class SearchBooks extends Component {
 	componentDidMount() {
 		// instant focus on search input field after component has loaded
 		this.searchInput.focus()
-	}
-
-
-	componentDidUpdate() {
-		this.state.didUpdate = true
 	}
 
 
@@ -95,9 +88,7 @@ class SearchBooks extends Component {
 	  	const { query, results } = this.state
 
 	  	// if the Component was just updated perform the render function
-	  	if (this.state.didUpdate && results.length) {
-
-	  		this.state.didUpdate = false
+	  	if (results.length) {
 
 	  		// loop over the results from the search
 	  		results.map(book => {
@@ -139,7 +130,7 @@ class SearchBooks extends Component {
 									<div className="book-cover" style={{
 						                width: 128,
 						                height: 193,
-						                backgroundImage: `url(${book.imageLinks.smallThumbnail})`
+						                backgroundImage: `url(${book.imageLinks ? book.imageLinks.smallThumbnail : null})`
 						              }}/>
 						              <div className="book-shelf-changer">
 										<select 

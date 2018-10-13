@@ -1,8 +1,6 @@
 import React from 'react'
 import { Route } from 'react-router-dom'
 import { Link } from 'react-router-dom'
-import PropTypes from 'prop-types'
-import sortBy from 'sort-by'
 import ListBooks from './ListBooks'
 import ShowBook from './ShowBook'
 import SearchBooks from './SearchBooks'
