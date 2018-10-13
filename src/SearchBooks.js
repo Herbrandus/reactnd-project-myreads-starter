@@ -36,11 +36,6 @@ class SearchBooks extends Component {
 		this.setState({ results: [] })
 	}
 
-	/*
-	if (this.props.onChangeShelf) {
-		this.props.onChangeShelf(targetBook, newShelf)
-	}
-	*/
 
 	componentDidMount() {
 		// instant focus on search input field after component has loaded

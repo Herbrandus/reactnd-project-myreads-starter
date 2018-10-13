@@ -1,4 +1,4 @@
-# MyReads Project
+# BestReads Project
 
 ## Table of Contents
 
@@ -30,4 +30,4 @@ This project was bootstrapped with [Create React App](https://github.com/faceboo
 
 ## Contributing
 
-This is a finished project for a Udacity assignment. Contributions are not necessary, but if you see possible improvements, just send me a message!
+This is a finished project for a Udacity Front End Web Development assignment. Contributions are not necessary, but if you see possible improvements, just send me a message!
