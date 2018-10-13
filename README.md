@@ -14,7 +14,7 @@ This is a small app to keep track of what books to read, what books you are curr
 
 To install this app first run `npm install` to install all dependencies.
 The additional React libraries used for this app are `react-router-dom`, `prop-types` and `sort-by`.
-This app uses `BooksAPI.js` to get the books you're looking for.
+This app uses `BooksAPI.js` to get the books you're looking for. To start the app, run `npm start`.
 
 ## How the app works
 
